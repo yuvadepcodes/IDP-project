@@ -99,28 +99,6 @@ html, body, [data-testid="stAppViewContainer"] {
   transform: translateX(3px);
 }
 
-.page-nav-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
-  padding: 0 48px;
-  margin-top: 36px;
-  margin-bottom: 28px;
-}
-.page-nav-grid .stButton > button {
-  background: #fff !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text-1) !important;
-  border-radius: var(--radius-sm) !important;
-  box-shadow: var(--shadow-sm) !important;
-  font-size: .95rem !important;
-  font-weight: 700 !important;
-}
-.page-nav-grid .stButton > button:hover {
-  transform: translateY(-1px) !important;
-  box-shadow: 0 14px 36px rgba(30,125,50,.12) !important;
-}
-
 /* ── Generic button reset ── */
 .stButton > button {
   font-family: 'DM Sans', sans-serif !important;
@@ -545,6 +523,7 @@ with st.sidebar:
         if st.button(f"{icon}  {active}{label}", key=f"nav_{key}"):
             nav(key)
 
+    st.markdown("<div style='padding:14px 8px; font-size:.75rem; color:rgba(255,255,255,.45); text-align:center; line-height:1.6;'>Open the left sidebar to navigate on mobile. Collapse it to save space.</div>", unsafe_allow_html=True)
     st.markdown("<div style='height:1px;background:rgba(255,255,255,.08);margin:20px 0;'></div>", unsafe_allow_html=True)
     st.markdown("""
     <div style="padding:0 8px; font-size:.72rem; color:rgba(255,255,255,.3); text-align:center; line-height:1.7;">
@@ -609,28 +588,10 @@ def card(content_html: str, padding: str = "28px 32px", extra_style: str = ""):
 def section_gap(px=32):
     st.markdown(f"<div style='height:{px}px'></div>", unsafe_allow_html=True)
 
-
-def page_nav():
-    st.markdown('<div class="page-nav-grid">', unsafe_allow_html=True)
-    cols = st.columns([1, 1, 1, 1, 1], gap="small")
-    nav_items = [
-        ("🏠 Home", "home"),
-        ("🔬 Scan", "scan"),
-        ("📋 Results", "result"),
-        ("📊 Dashboard", "dashboard"),
-        ("💡 About", "about"),
-    ]
-    for col, (label, key) in zip(cols, nav_items):
-        active = "✦ " if st.session_state.page == key else ""
-        if col.button(f"{active}{label}", key=f"page_nav_{key}", use_container_width=True):
-            nav(key)
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # ─────────────────────────────────────────────
 #  PAGE: HOME
 # ─────────────────────────────────────────────
 def page_home():
-    page_nav()
     section_gap(24)
 
     st.markdown("""
@@ -770,7 +731,6 @@ def page_scan():
         "Scan Your Crop",
         "Upload a clear leaf image for instant AI-powered disease detection."
     )
-    page_nav()
     section_gap(24)
 
     st.markdown("""
@@ -1011,7 +971,6 @@ def page_scan():
 # ─────────────────────────────────────────────
 def page_result():
     if not st.session_state.result:
-        page_nav()
         section_gap(24)
         st.markdown("""
         <div style="padding:80px 48px; text-align:center;">
@@ -1029,7 +988,6 @@ def page_result():
         "Diagnosis Report",
         f"Analysis completed on {r['scan_date']} · {r['crop']} · {r['stage']}"
     )
-    page_nav()
     section_gap(24)
 
     sev_color = {"Healthy": "#4CAF50", "Mild": "#8BC34A",
@@ -1210,7 +1168,6 @@ def page_dashboard():
         "Field Health Dashboard",
         "Track scan history, monitor disease trends, and manage crop health records."
     )
-    page_nav()
     section_gap(24)
 
     history = st.session_state.history
@@ -1381,7 +1338,6 @@ def page_about():
         "About CropSense AI",
         "Built for farmers, powered by deep learning. Protecting the world's food supply one leaf at a time."
     )
-    page_nav()
     section_gap(24)
 
     st.markdown("<div style='padding:0 48px;'>", unsafe_allow_html=True)
