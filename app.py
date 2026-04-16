@@ -249,6 +249,9 @@ html, body, [data-testid="stAppViewContainer"] {
   grid-template-columns: 1.1fr 0.9fr;
   gap: 40px;
   align-items: center;
+  background: linear-gradient(180deg, #F7FBF7 0%, #EAF4E7 100%);
+  border: 1px solid rgba(56,142,60,.16);
+  border-radius: 32px;
 }
 .home-hero-copy {
   z-index: 1;
@@ -257,15 +260,15 @@ html, body, [data-testid="stAppViewContainer"] {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(76,175,80,.12);
+  border: 1px solid rgba(76,175,80,.2);
   border-radius: 999px;
   padding: 10px 18px;
   font-size: .78rem;
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: #DCECDD;
+  color: #1B5E20;
   margin-bottom: 18px;
 }
 .hero-headline {
@@ -274,13 +277,13 @@ html, body, [data-testid="stAppViewContainer"] {
   line-height: 1.02;
   font-weight: 900;
   letter-spacing: -0.04em;
-  color: #fff;
+  color: #0E3620;
   margin-bottom: 22px;
   max-width: 620px;
 }
 .hero-copy {
   font-size: 1rem;
-  color: rgba(255,255,255,.8);
+  color: #42523a;
   max-width: 560px;
   line-height: 1.7;
   margin-bottom: 32px;
@@ -307,9 +310,9 @@ html, body, [data-testid="stAppViewContainer"] {
   box-shadow: 0 18px 45px rgba(30,125,50,.22);
 }
 .hero-action.secondary {
-  background: rgba(255,255,255,.12);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,.18);
+  background: #fff;
+  color: #1B5E20;
+  border: 1px solid rgba(27,94,32,.18);
 }
 .hero-action:hover {
   transform: translateY(-2px);
@@ -320,8 +323,8 @@ html, body, [data-testid="stAppViewContainer"] {
   gap: 16px;
 }
 .hero-stat {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
+  background: #fff;
+  border: 1px solid rgba(27,94,32,.12);
   border-radius: 18px;
   padding: 18px 20px;
   text-align: center;
@@ -330,11 +333,11 @@ html, body, [data-testid="stAppViewContainer"] {
   font-family: 'Poppins', sans-serif;
   font-weight: 800;
   font-size: 1.7rem;
-  color: #fff;
+  color: #1B5E20;
 }
 .hero-stat .label {
   font-size: .78rem;
-  color: rgba(255,255,255,.72);
+  color: #4e6545;
   letter-spacing: .08em;
   text-transform: uppercase;
   margin-top: 6px;
@@ -343,9 +346,9 @@ html, body, [data-testid="stAppViewContainer"] {
   position: relative;
   border-radius: 32px;
   overflow: hidden;
-  box-shadow: 0 35px 80px rgba(0,0,0,.18);
+  box-shadow: 0 35px 80px rgba(30,95,40,.14);
   min-height: 520px;
-  background: linear-gradient(180deg, #162C0F, #234F29 45%, #0E2A12);
+  background: #fff;
   padding: 34px;
   display: flex;
   flex-direction: column;
@@ -355,19 +358,19 @@ html, body, [data-testid="stAppViewContainer"] {
   font-family: 'Poppins', sans-serif;
   font-size: 1.1rem;
   font-weight: 800;
-  color: #fff;
+  color: #1B5E20;
   margin-bottom: 12px;
 }
 .hero-panel .panel-block {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
+  background: #F4FBF5;
+  border: 1px solid rgba(27,94,32,.08);
   border-radius: 22px;
   padding: 18px;
   margin-bottom: 18px;
 }
 .hero-panel .panel-label {
   font-size: .78rem;
-  color: rgba(255,255,255,.72);
+  color: #4e6545;
   margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: .08em;
@@ -376,7 +379,7 @@ html, body, [data-testid="stAppViewContainer"] {
   font-family: 'Poppins', sans-serif;
   font-size: 2rem;
   font-weight: 800;
-  color: #fff;
+  color: #1B5E20;
 }
 .feature-grid {
   display: grid;
@@ -606,6 +609,7 @@ def card(content_html: str, padding: str = "28px 32px", extra_style: str = ""):
 def section_gap(px=32):
     st.markdown(f"<div style='height:{px}px'></div>", unsafe_allow_html=True)
 
+
 def page_nav():
     st.markdown('<div class="page-nav-grid">', unsafe_allow_html=True)
     cols = st.columns([1, 1, 1, 1, 1], gap="small")
@@ -673,7 +677,7 @@ def page_home():
             <div class="panel-value">Copper fungicide + improved airflow</div>
           </div>
         </div>
-        <div style="color:rgba(255,255,255,.75); font-size:.92rem; line-height:1.8;">
+        <div style="color:#42523a; font-size:.92rem; line-height:1.8;">
           <strong>Designed for on-field use.</strong> A modern interface, smart guidance and
           fast results help make every crop scan feel authoritative and reliable.
         </div>
