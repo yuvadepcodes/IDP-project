@@ -1141,34 +1141,15 @@ def page_result():
         """, unsafe_allow_html=True)
 
     with col_right:
-        # Top predictions
-        preds_html = ""
+        st.markdown("### 🎯 AI Predictions")
         for disease, conf in r["top_predictions"]:
-            bar_w = int(conf)
             is_top = conf == r["confidence"]
-            preds_html += f"""
-            <div style="margin-bottom:14px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                <span style="font-size:.82rem; font-weight:{'700' if is_top else '500'};
-                             color:{'var(--green-700)' if is_top else 'var(--text-2)'};">{disease}</span>
-                <span style="font-size:.78rem; font-weight:700;
-                             color:{'var(--green-700)' if is_top else 'var(--text-3)'};">{conf}%</span>
-              </div>
-              <div style="background:var(--green-50); border-radius:4px; height:7px; overflow:hidden;">
-                <div style="width:{bar_w}%; height:100%;
-                            background:{'linear-gradient(90deg,var(--green-600),var(--green-400))' if is_top else 'var(--green-200)'};
-                            border-radius:4px; transition:width 1s;"></div>
-              </div>
-            </div>"""
-
-        st.markdown(f"""
-        <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-                    padding:28px; margin-bottom:20px;">
-          <h4 style="font-family:'Poppins',sans-serif; font-size:.95rem; font-weight:700;
-                     color:var(--text-1); margin-bottom:20px;">🎯 AI Predictions</h4>
-          {preds_html}
-        </div>
-        """, unsafe_allow_html=True)
+            if is_top:
+                st.markdown(f"**{disease}**  ·  **{conf}%**")
+            else:
+                st.markdown(f"{disease}  ·  **{conf}%**")
+            st.progress(conf / 100.0)
+            st.markdown("---")
 
         # Quick info
         st.markdown(f"""
@@ -1421,93 +1402,27 @@ def page_about():
           </p>
         </div>
 
-        <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-                    padding:36px;">
-          <h3 style="font-family:'Poppins',sans-serif; font-size:1.2rem; font-weight:800;
-                     color:var(--text-1); margin-bottom:24px;">🗺️ Development Roadmap</h3>
-
-          <div style="position:relative; padding-left:28px;">
-            <div style="position:absolute; left:10px; top:0; bottom:0; width:2px;
-                        background:linear-gradient(to bottom, var(--green-600), var(--blue-400));
-                        border-radius:2px;"></div>
-
-            <div style="margin-bottom:28px; position:relative;">
-              <div style="position:absolute; left:-22px; top:2px; width:16px; height:16px;
-                          border-radius:50%; background:var(--green-600); border:3px solid #fff;
-                          box-shadow:0 0 0 3px var(--green-200);"></div>
-              <div style="background:var(--green-50); border:1px solid var(--green-200);
-                          border-radius:12px; padding:16px 18px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="background:var(--green-700); color:#fff; border-radius:20px;
-                               padding:2px 10px; font-size:.68rem; font-weight:700;">CURRENT ✓</span>
-                  <span style="font-family:'Poppins',sans-serif; font-size:.88rem; font-weight:700;
-                               color:var(--green-800);">v1.0 — Frontend Prototype</span>
-                </div>
-                <p style="font-size:.82rem; color:var(--text-2); line-height:1.6;">
-                  Complete UI/UX with all 5 core pages, mobile-responsive design,
-                  and end-to-end user journey simulation.
-                </p>
-              </div>
-            </div>
-
-            <div style="margin-bottom:28px; position:relative;">
-              <div style="position:absolute; left:-22px; top:2px; width:16px; height:16px;
-                          border-radius:50%; background:var(--blue-400); border:3px solid #fff;
-                          box-shadow:0 0 0 3px var(--blue-100);"></div>
-              <div style="background:#E3F2FD; border:1px solid var(--blue-100);
-                          border-radius:12px; padding:16px 18px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="background:var(--blue-600); color:#fff; border-radius:20px;
-                               padding:2px 10px; font-size:.68rem; font-weight:700;">NEXT →</span>
-                  <span style="font-family:'Poppins',sans-serif; font-size:.88rem; font-weight:700;
-                               color:var(--blue-700);">v2.0 — AI Backend Integration</span>
-                </div>
-                <p style="font-size:.82rem; color:var(--text-2); line-height:1.6;">
-                  MobileNetV2 model trained on PlantVillage dataset with live inference API,
-                  real image processing, and confidence calibration.
-                </p>
-              </div>
-            </div>
-
-            <div style="margin-bottom:28px; position:relative;">
-              <div style="position:absolute; left:-22px; top:2px; width:16px; height:16px;
-                          border-radius:50%; background:#9C27B0; border:3px solid #fff;
-                          box-shadow:0 0 0 3px #E1BEE7;"></div>
-              <div style="background:#F3E5F5; border:1px solid #E1BEE7;
-                          border-radius:12px; padding:16px 18px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="background:#7B1FA2; color:#fff; border-radius:20px;
-                               padding:2px 10px; font-size:.68rem; font-weight:700;">FUTURE</span>
-                  <span style="font-family:'Poppins',sans-serif; font-size:.88rem; font-weight:700;
-                               color:#4A148C;">v3.0 — Multilingual & Mobile App</span>
-                </div>
-                <p style="font-size:.82rem; color:var(--text-2); line-height:1.6;">
-                  Native mobile app with offline support, 10+ regional languages,
-                  and weather-integrated disease risk forecasting.
-                </p>
-              </div>
-            </div>
-
-            <div style="position:relative;">
-              <div style="position:absolute; left:-22px; top:2px; width:16px; height:16px;
-                          border-radius:50%; background:#FF6F00; border:3px solid #fff;
-                          box-shadow:0 0 0 3px #FFE0B2;"></div>
-              <div style="background:#FFF3E0; border:1px solid #FFE0B2;
-                          border-radius:12px; padding:16px 18px;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-                  <span style="background:#E65100; color:#fff; border-radius:20px;
-                               padding:2px 10px; font-size:.68rem; font-weight:700;">VISION</span>
-                  <span style="font-family:'Poppins',sans-serif; font-size:.88rem; font-weight:700;
-                               color:#BF360C;">v4.0 — Regional Crop Intelligence</span>
-                </div>
-                <p style="font-size:.82rem; color:var(--text-2); line-height:1.6;">
-                  Region-specific crop support, satellite imagery integration,
-                  and government advisory system API connections.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        st.markdown("### 🗺️ Development Roadmap")
+        st.info(
+            "**CURRENT ✓** v1.0 — Frontend Prototype\n\n"
+            "Complete UI/UX with all 5 core pages, mobile-responsive design,"
+            " and end-to-end user journey simulation."
+        )
+        st.success(
+            "**NEXT →** v2.0 — AI Backend Integration\n\n"
+            "MobileNetV2 model trained on PlantVillage dataset with live inference API,"
+            " real image processing, and confidence calibration."
+        )
+        st.warning(
+            "**FUTURE** v3.0 — Multilingual & Mobile App\n\n"
+            "Native mobile app with offline support, 10+ regional languages,"
+            " and weather-integrated disease risk forecasting."
+        )
+        st.markdown(
+            "**VISION** v4.0 — Regional Crop Intelligence\n\n"
+            "Region-specific crop support, satellite imagery integration,"
+            " and government advisory system API connections."
+        )
         """, unsafe_allow_html=True)
 
     with col_right:
