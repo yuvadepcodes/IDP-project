@@ -37,6 +37,59 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+st.markdown("""
+<style>
+:root {
+  color-scheme: dark;
+}
+body {
+  background: radial-gradient(circle at top left, rgba(102, 187, 106, 0.15), transparent 18%),
+              radial-gradient(circle at 95% 10%, rgba(66, 165, 245, 0.12), transparent 20%),
+              linear-gradient(180deg, #06140b 0%, #0f2b15 42%, #112f17 100%);
+}
+[data-testid="stAppViewContainer"] {
+  background: transparent;
+}
+[data-testid="stSidebar"] {
+  background: #0d2d15;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+#MainMenu, footer, header {
+  visibility: hidden;
+}
+div.block-container {
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
+}
+.stButton > button {
+  border-radius: 999px;
+  padding: 0.95rem 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.stButton > button[kind="primary"] {
+  background: linear-gradient(135deg, #66bb6a, #42a5f5);
+  border: none;
+  color: white;
+}
+.stTextInput > div > input {
+  border-radius: 16px;
+}
+.stFileUploader > div {
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes scanLine {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(110%); }
+}
+</style>
+""", unsafe_allow_html=True)
+
 # ─────────────────────────────────────────────────────────────
 #  MODEL + CLASS LOADER  (cached so it only runs once)
 # ─────────────────────────────────────────────────────────────
@@ -362,46 +415,54 @@ with st.sidebar:
 if st.session_state.page == "home":
     st.markdown("""
     <style>
-    .hero{background:linear-gradient(145deg,#0a2e14 0%,#1B5E20 45%,#0d3b1a 100%);
-          padding:72px 52px 80px;position:relative;overflow:hidden}
+    .hero{background:linear-gradient(145deg,#08180d 0%,#0f3b18 45%,#092210 100%);
+          padding:72px 54px 84px;position:relative;overflow:hidden;border-radius:42px;
+          border:1px solid rgba(255,255,255,.08);box-shadow:0 40px 120px rgba(0,0,0,.25);}
     .hero::before{content:'';position:absolute;inset:0;
-      background:radial-gradient(ellipse 65% 55% at 78% 50%,rgba(76,175,80,.17),transparent 65%),
-                 radial-gradient(ellipse 40% 35% at 18% 78%,rgba(25,118,210,.11),transparent 60%)}
+      background:radial-gradient(circle at 78% 42%,rgba(102,187,106,.16),transparent 28%),
+                 radial-gradient(circle at 15% 75%,rgba(66,165,245,.08),transparent 30%)}
     .hero-grid{position:relative;z-index:1;display:grid;
-               grid-template-columns:1fr 1fr;gap:52px;align-items:center;max-width:1200px;margin:0 auto}
-    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(76,175,80,.14);
-                border:1px solid rgba(76,175,80,.32);border-radius:40px;padding:5px 16px;
-                margin-bottom:20px;font-size:.73rem;font-weight:700;color:#81C784;letter-spacing:.08em;text-transform:uppercase}
-    .hero-h1{font-family:'Poppins',sans-serif;font-size:clamp(2rem,4vw,3.2rem);
-             font-weight:900;line-height:1.08;letter-spacing:-.04em;color:#fff;margin-bottom:18px}
-    .hero-h1 span{background:linear-gradient(135deg,#81C784,#A5D6A7,#4FC3F7);
+               grid-template-columns:1.05fr 0.95fr;gap:48px;align-items:center;max-width:1200px;margin:0 auto}
+    .hero-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(76,175,80,.18);
+                border:1px solid rgba(76,175,80,.3);border-radius:999px;padding:9px 18px;
+                margin-bottom:24px;font-size:.75rem;font-weight:800;color:#A7F0A4;
+                letter-spacing:.12em;text-transform:uppercase}
+    .hero-h1{font-family:'Poppins',sans-serif;font-size:clamp(2.8rem,4vw,4.2rem);
+             font-weight:900;line-height:1.02;letter-spacing:-.06em;color:#fff;margin-bottom:20px}
+    .hero-h1 span{background:linear-gradient(135deg,#81C784,#4FC3F7,#A5D6A7);
                   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hero-sub{font-size:1rem;color:rgba(255,255,255,.62);max-width:480px;line-height:1.75;margin-bottom:32px}
-    .hero-stats{display:flex;gap:0;margin-top:44px;border-top:1px solid rgba(255,255,255,.1);padding-top:28px}
-    .stat{text-align:center;flex:1;padding:0 16px}
-    .stat+.stat{border-left:1px solid rgba(255,255,255,.1)}
-    .stat-n{font-family:'Poppins',sans-serif;font-size:1.7rem;font-weight:800;color:#fff;line-height:1}
-    .stat-l{font-size:.7rem;color:rgba(255,255,255,.42);margin-top:4px;letter-spacing:.07em;text-transform:uppercase}
-    .ai-card{background:rgba(255,255,255,.07);backdrop-filter:blur(14px);
-             border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:24px;
-             box-shadow:0 24px 60px rgba(0,0,0,.35);animation:float 4s ease-in-out infinite;
-             max-width:310px;margin:0 auto}
-    .ai-card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-    .ai-title{font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:.88rem}
-    .ai-live{background:rgba(25,118,210,.28);border:1px solid rgba(66,165,245,.38);
-             border-radius:20px;padding:3px 10px;font-size:.63rem;font-weight:700;color:#90CAF9;letter-spacing:.06em}
-    .leaf-box{background:linear-gradient(135deg,#1B5E20,#2E7D32,#1565C0);
-              border-radius:14px;height:155px;display:flex;align-items:center;
-              justify-content:center;font-size:4rem;position:relative;overflow:hidden}
-    .scan-ln{position:absolute;left:0;right:0;height:2px;
-             background:linear-gradient(90deg,transparent,rgba(66,165,245,.85),transparent);
-             animation:scanLine 2.4s ease-in-out infinite}
+    .hero-sub{font-size:1.02rem;color:rgba(255,255,255,.72);max-width:540px;line-height:1.8;margin-bottom:36px}
+    .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px}
+    .stat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+          border-radius:22px;padding:20px 18px;text-align:center;backdrop-filter:blur(14px)}
+    .stat-n{font-family:'Poppins',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;line-height:1}
+    .stat-l{font-size:.72rem;color:rgba(255,255,255,.55);margin-top:8px;letter-spacing:.08em;text-transform:uppercase}
+    .ai-card{background:rgba(255,255,255,.08);backdrop-filter:blur(18px);
+             border:1px solid rgba(255,255,255,.12);border-radius:28px;padding:28px;
+             box-shadow:0 30px 80px rgba(0,0,0,.24);animation:float 4.8s ease-in-out infinite;
+             max-width:340px;margin:0 auto}
+    .ai-card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+    .ai-title{font-family:'Poppins',sans-serif;font-weight:800;color:#fff;font-size:.98rem}
+    .ai-live{background:rgba(66,165,245,.18);border:1px solid rgba(66,165,245,.3);
+             border-radius:999px;padding:6px 15px;font-size:.7rem;font-weight:800;color:#C5EAFB;
+             letter-spacing:.08em;text-transform:uppercase}
+    .leaf-box{background:linear-gradient(135deg,#1B5E20,#257a3c,#1565C0);
+              border-radius:24px;height:170px;display:flex;align-items:center;
+              justify-content:center;font-size:4.5rem;position:relative;overflow:hidden;color:#fff}
+    .scan-ln{position:absolute;left:-10%;right:-10%;top:50%;height:2px;
+             background:linear-gradient(90deg,transparent,rgba(192,238,255,.82),transparent);
+             animation:scanLine 2.2s ease-in-out infinite}
     .res-row{display:flex;align-items:center;justify-content:space-between;
-             margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
-    .res-val{font-family:'Poppins',sans-serif;font-size:.84rem;font-weight:700;color:#81C784}
-    .conf-pill{background:rgba(76,175,80,.2);border:1px solid rgba(76,175,80,.3);
-               border-radius:20px;padding:4px 12px;font-family:'Poppins',sans-serif;
-               font-size:.78rem;font-weight:700;color:#A5D6A7}
+             margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,.1)}
+    .res-val{font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:800;color:#A5D6A7}
+    .conf-pill{background:rgba(102,187,106,.18);border:1px solid rgba(102,187,106,.28);
+               border-radius:999px;padding:8px 14px;font-family:'Poppins',sans-serif;
+               font-size:.78rem;font-weight:700;color:#DFF7D9}
+    .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;max-width:1100px;margin-left:auto;margin-right:auto}
+    .feature-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+                  border-radius:24px;padding:28px 24px;min-height:180px;box-shadow:0 18px 50px rgba(0,0,0,.14)}
+    .feature-title{font-family:'Poppins',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:12px}
+    .feature-text{font-size:.95rem;color:rgba(255,255,255,.72);line-height:1.75}
     </style>
 
     <div class="hero">
@@ -410,26 +471,26 @@ if st.session_state.page == "home":
           <div class="hero-badge">🌿 AI-Powered Plant Pathology</div>
           <h1 class="hero-h1">Detect Crop Diseases with <span>AI Precision</span></h1>
           <p class="hero-sub">
-            Upload any leaf image for instant deep-learning disease analysis —
-            with severity scoring, confidence metrics, and expert treatment plans.
+            Upload any leaf image for instant deep-learning disease analysis — with severity scoring, plant health ranking,
+            and expert treatment recommendations optimized for farmers and agronomists.
           </p>
           <div class="hero-stats">
             <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Accuracy</div></div>
-            <div class="stat"><div class="stat-n">15+</div><div class="stat-l">Diseases</div></div>
-            <div class="stat"><div class="stat-n">&lt;3s</div><div class="stat-l">Analysis</div></div>
-            <div class="stat"><div class="stat-n">3</div><div class="stat-l">Crops</div></div>
+            <div class="stat"><div class="stat-n">15+</div><div class="stat-l">Disease Types</div></div>
+            <div class="stat"><div class="stat-n">&lt;3s</div><div class="stat-l">Per Scan</div></div>
+            <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Access</div></div>
           </div>
         </div>
         <div style="animation:fadeUp .65s ease both">
           <div class="ai-card">
             <div class="ai-card-h">
-              <span class="ai-title">🔬 AI Scanning…</span>
-              <span class="ai-live">LIVE MODEL</span>
+              <span class="ai-title">🔬 Live Scan Preview</span>
+              <span class="ai-live">MODEL ONLINE</span>
             </div>
             <div class="leaf-box">🍃<div class="scan-ln"></div></div>
             <div class="res-row">
               <div>
-                <div style="font-size:.7rem;color:rgba(255,255,255,.45);margin-bottom:2px">DETECTED</div>
+                <div style="font-size:.72rem;color:rgba(255,255,255,.48);margin-bottom:3px">LATEST DETECTION</div>
                 <div class="res-val">Late Blight</div>
               </div>
               <div class="conf-pill">94.2%</div>
@@ -437,12 +498,26 @@ if st.session_state.page == "home":
           </div>
         </div>
       </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-title">Fast, Accurate Insights</div>
+          <div class="feature-text">Get instant disease classification and severity scoring for leaf photos in under 3 seconds.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Designed for Farmers</div>
+          <div class="feature-text">A mobile-ready interface with clear recommendations that work on the field and in the greenhouse.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Visual Results</div>
+          <div class="feature-text">Monitor plant health using confidence metrics, top predictions, and tailored treatment plans.</div>
+        </div>
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("🚀 Start Scanning", type="primary", use_container_width=True):
+    center_col, = st.columns([1])
+    with center_col:
+        if st.button("🚀 Start Scanning", type="primary", width='stretch'):
             nav("scan")
 
 # ─────────────────────────────────────────────────────────────
@@ -451,75 +526,99 @@ if st.session_state.page == "home":
 elif st.session_state.page == "scan":
     st.markdown("""
     <style>
-    .scan-header{background:linear-gradient(140deg,var(--g900) 0%,var(--g800) 55%,#163d1c 100%);
-                 padding:44px 52px 36px;position:relative;overflow:hidden;}
-    .scan-header::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;
-                         background:radial-gradient(circle,rgba(76,175,80,.14),transparent 70%);pointer-events:none}
-    .scan-header::after{content:'';position:absolute;bottom:-50px;left:25%;width:220px;height:220px;border-radius:50%;
-                        background:radial-gradient(circle,rgba(25,118,210,.09),transparent 70%);pointer-events:none}
-    .scan-title{font-family:'Poppins',sans-serif;font-size:clamp(1.5rem,3vw,2.3rem);
-                font-weight:900;color:#fff;letter-spacing:-.04em;line-height:1.12;margin-bottom:10px}
-    .scan-subtitle{font-size:.92rem;color:rgba(255,255,255,.58);max-width:520px;line-height:1.7}
+    .scan-header{background:linear-gradient(140deg,#0a2d13 0%,#134e23 55%,#0b2a12 100%);
+                 padding:42px 48px 40px;position:relative;overflow:hidden;border-radius:30px;
+                 border:1px solid rgba(255,255,255,.08);box-shadow:0 24px 80px rgba(0,0,0,.22);}
+    .scan-header::before{content:'';position:absolute;top:-80px;right:-90px;width:260px;height:260px;border-radius:50%;
+                         background:radial-gradient(circle,rgba(102,187,106,.16),transparent 72%);pointer-events:none}
+    .scan-header::after{content:'';position:absolute;bottom:-40px;left:20%;width:220px;height:220px;border-radius:50%;
+                        background:radial-gradient(circle,rgba(66,165,245,.1),transparent 72%);pointer-events:none}
+    .scan-title{font-family:'Poppins',sans-serif;font-size:clamp(1.7rem,3vw,2.4rem);
+                font-weight:900;color:#fff;letter-spacing:-.05em;line-height:1.08;margin-bottom:12px}
+    .scan-subtitle{font-size:.98rem;color:rgba(255,255,255,.72);max-width:560px;line-height:1.75}
+    .panel-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+                border-radius:28px;padding:28px;box-shadow:0 22px 60px rgba(0,0,0,.18);}
+    .panel-title{font-family:'Poppins',sans-serif;font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:12px}
+    .panel-text{font-size:.95rem;color:rgba(255,255,255,.72);line-height:1.8;margin-bottom:20px}
+    .image-preview{border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 18px 35px rgba(0,0,0,.14);margin-bottom:18px}
+    .result-pill{border-radius:999px;padding:10px 16px;font-size:.82rem;font-weight:700;display:inline-flex;
+                 align-items:center;gap:8px;background:rgba(66,165,245,.14);color:#B3E5FC;border:1px solid rgba(66,165,245,.22);}
+    .top-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:24px;margin-top:22px;}
+    .prediction-item{font-size:.95rem;color:#E6F5E8;margin-bottom:10px;}
+    .prediction-item span{color:#A7F6AF;}
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="scan-header"><div class="scan-title">Crop Disease Scanner</div><div class="scan-subtitle">Upload a clear image of your crop leaf for instant AI analysis</div></div>', unsafe_allow_html=True)
+    st.markdown('<div class="scan-header"><div class="scan-title">Crop Disease Scanner</div><div class="scan-subtitle">Upload a clear image of your crop leaf for instant AI analysis and actionable treatment guidance.</div></div>', unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1, 1])
-
-    with col1:
+    left, right = st.columns([1.05, 1])
+    with left:
+        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">Upload Image</div>', unsafe_allow_html=True)
+        st.markdown('<div class="panel-text">Supported formats: JPG, JPEG, PNG. For best results, use a well-lit photo of the leaf or plant surface.</div>', unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-        
+
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Uploaded Image", use_container_width=True)
-            
-            if st.button("🔍 Analyze Disease", type="primary", use_container_width=True):
-                with st.spinner("Analyzing..."):
+            st.markdown('<div class="image-preview">', unsafe_allow_html=True)
+            st.image(image, caption="Uploaded image preview", use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown('<div class="result-pill">📷 Ready to analyze</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            if st.button("🔍 Analyze Disease", type="primary", width='stretch'):
+                with st.spinner("Analyzing... This may take a few seconds."):
                     result = infer(image)
                     st.session_state.result = result
                     st.rerun()
+        else:
+            st.markdown('<div class="result-pill">Upload a plant photo to start</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
-    with col2:
+    with right:
+        st.markdown('<div class="panel-card">', unsafe_allow_html=True)
+        st.markdown('<div class="panel-title">Analysis Outcome</div>', unsafe_allow_html=True)
+
         if st.session_state.result:
             result = st.session_state.result
-            
             if not result.get("is_plant", True):
                 st.error(f"❌ {result['error']}")
-                st.info(f"Confidence: {result.get('confidence', 0):.2f}, Margin: {result.get('margin', 0):.2f}")
+                st.markdown(f"<p style='color:rgba(255,255,255,.72);margin-top:12px;'>Confidence: {result.get('confidence', 0):.1%} · Margin: {result.get('margin', 0):.1%}</p>", unsafe_allow_html=True)
             else:
-                # Success
-                col_a, col_b = st.columns([1, 2])
-                
-                with col_a:
-                    st.metric("Crop", result["crop"])
-                    st.metric("Disease", result["disease"])
-                    st.metric("Confidence", f"{result['confidence']}%")
-                    
-                    severity_color = {"Healthy": "green", "Mild": "orange", "Moderate": "orange", "Severe": "red"}.get(result["severity"], "blue")
-                    st.markdown(f'<div style="background:{severity_color};color:white;padding:8px;border-radius:8px;text-align:center;font-weight:bold;">{result["severity"]}</div>', unsafe_allow_html=True)
-                
-                with col_b:
-                    st.subheader("📋 Treatment Recommendations")
-                    for treatment in result["treatments"][:5]:  # Show first 5
-                        st.markdown(f"• {treatment}")
-                    
-                    if len(result["treatments"]) > 5:
-                        with st.expander("Show more treatments"):
-                            for treatment in result["treatments"][5:]:
-                                st.markdown(f"• {treatment}")
-                
-                # Disease info
-                if result["disease"] in DISEASE_INFO:
-                    st.subheader("ℹ️ About this Disease")
-                    st.markdown(DISEASE_INFO[result["disease"]], unsafe_allow_html=True)
-                
-                # Top 5 predictions
-                st.subheader("📊 Top Predictions")
-                for i, (disease, conf) in enumerate(result["top5"][:5], 1):
-                    st.progress(conf / 100, text=f"{i}. {disease} ({conf:.1f}%)")
-        else:
-            st.info("👆 Upload an image and click 'Analyze Disease' to get started!")
+                st.markdown(f"<div style='display:flex;justify-content:space-between;gap:12px;margin-bottom:18px;'>"
+                            f"<div style='background:rgba(102,187,106,.14);border-radius:20px;padding:18px;flex:1;'>"
+                            f"<div style='font-size:.76rem;color:#B3E5FC;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;'>Crop</div>"
+                            f"<div style='font-size:1.35rem;font-weight:800;color:#fff;'>{result['crop']}</div></div>"
+                            f"<div style='background:rgba(66,165,245,.14);border-radius:20px;padding:18px;flex:1;'>"
+                            f"<div style='font-size:.76rem;color:#B3E5FC;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;'>Disease</div>"
+                            f"<div style='font-size:1.35rem;font-weight:800;color:#fff;'>{result['disease']}</div></div></div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='display:flex;justify-content:space-between;gap:12px;margin-bottom:18px;'>"
+                            f"<div style='background:rgba(255,255,255,.05);border-radius:20px;padding:18px;flex:1;'>"
+                            f"<div style='font-size:.76rem;color:#B3E5FC;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;'>Confidence</div>"
+                            f"<div style='font-size:1.25rem;font-weight:800;color:#fff;'>{result['confidence']}%</div></div>"
+                            f"<div style='background:rgba(255,255,255,.05);border-radius:20px;padding:18px;flex:1;'>"
+                            f"<div style='font-size:.76rem;color:#B3E5FC;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;'>Severity</div>"
+                            f"<div style='font-size:1.25rem;font-weight:800;color:#fff;'>{result['severity']}</div></div></div>", unsafe_allow_html=True)
 
-    if st.button("🏠 Back to Home", use_container_width=True):
+                st.markdown('<div class="top-card">', unsafe_allow_html=True)
+                st.markdown('<div class="feature-title">Top Predictions</div>', unsafe_allow_html=True)
+                for i, (disease, conf) in enumerate(result['top5'][:5], 1):
+                    st.markdown(f'<div class="prediction-item"><span>{i}.</span> {disease} — {conf:.1f}%</div>', unsafe_allow_html=True)
+                st.markdown('</div>', unsafe_allow_html=True)
+
+                st.markdown('<div class="top-card">', unsafe_allow_html=True)
+                st.markdown('<div class="feature-title">Treatment Guide</div>', unsafe_allow_html=True)
+                for treatment in result['treatments'][:5]:
+                    st.markdown(f'• {treatment}')
+                if len(result['treatments']) > 5:
+                    with st.expander('More guidance'):
+                        for treatment in result['treatments'][5:]:
+                            st.markdown(f'• {treatment}')
+                st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div style="color:rgba(255,255,255,.75);font-size:1rem;line-height:1.7;">Upload a plant image and click Analyze to see what disease affects it, how severe it is, and how to treat it.</div>', unsafe_allow_html=True)
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    if st.button("🏠 Back to Home", width='stretch'):
         nav("home")
