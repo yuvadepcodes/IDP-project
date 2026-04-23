@@ -11,15 +11,19 @@ model = tf.keras.models.load_model("crop_disease_model.keras")
 # -----------------------------
 # LOAD CLASS NAMES
 # -----------------------------
-# Make sure you saved this during training
 with open("class_names.txt", "r") as f:
     class_names = [line.strip() for line in f.readlines()]
 
 # -----------------------------
-# IMAGE PREPROCESSING
+# CONFIG
 # -----------------------------
 IMG_SIZE = (224, 224)
+THRESHOLD = 0.60
+MARGIN_THRESHOLD = 0.20
 
+# -----------------------------
+# PREPROCESS IMAGE
+# -----------------------------
 def preprocess(img_path):
     img = image.load_img(img_path, target_size=IMG_SIZE)
     img_array = image.img_to_array(img)
@@ -33,43 +37,45 @@ def preprocess(img_path):
 def predict_image(img_path):
     img = preprocess(img_path)
 
-    preds = model.predict(img, verbose=0)
-    predicted_index = np.argmax(preds)
+    preds = model.predict(img, verbose=0)[0]
 
-    confidence = float(np.max(preds))
-    label = class_names[predicted_index]
+    top_index = np.argmax(preds)
+    confidence = float(preds[top_index])
+    label = class_names[top_index]
+
+    # second best score for uncertainty check
+    sorted_preds = np.sort(preds)[::-1]
+    margin = sorted_preds[0] - sorted_preds[1]
+
+    # rejection logic (IMPORTANT)
+    if confidence < THRESHOLD or margin < MARGIN_THRESHOLD:
+        return "❌ Not a valid plant image / Uncertain", confidence
 
     return label, confidence
 
 # -----------------------------
 # SINGLE IMAGE TEST
 # -----------------------------
-img_path = "images.jpeg"   # change this
+img_path = "images.jpeg"  # change this
 
 if os.path.exists(img_path):
     label, confidence = predict_image(img_path)
-
-    if confidence < 0.60:
-        print(f"⚠️ Uncertain prediction: {label} ({confidence:.2f})")
-    else:
-        print(f"✅ Prediction: {label} ({confidence:.2f})")
+    print(f"{label} ({confidence:.2f})")
 else:
     print("Image not found:", img_path)
 
-
 # -----------------------------
-# BATCH TEST (MULTIPLE IMAGES)
+# BATCH TEST (OPTIONAL)
 # -----------------------------
 def predict_folder(folder_path):
     for file in os.listdir(folder_path):
-        if file.endswith((".jpg", ".jpeg", ".png")):
+        if file.lower().endswith((".jpg", ".jpeg", ".png")):
             path = os.path.join(folder_path, file)
 
             label, confidence = predict_image(path)
 
-            status = "⚠️ Uncertain" if confidence < 0.60 else "✅"
+            status = "⚠️" if "Uncertain" in label else "✅"
             print(f"{file} → {status} {label} ({confidence:.2f})")
 
-
-# Example usage:
+# Example:
 # predict_folder("test_images")
