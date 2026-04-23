@@ -18,7 +18,6 @@ from datetime import datetime, timedelta
 import random
 import io
 import os
-from tensorflow.keras.preprocessing import image
 
 # ── Optional TF import (graceful degradation for demo mode) ──
 try:
