@@ -95,9 +95,9 @@ div.block-container {
 MODEL_PATH       = "crop_disease_model.keras"
 CLASS_NAMES_PATH = "class_names.txt"
 IMG_SIZE         = (224, 224)
-THRESHOLD = 0.01
-MARGIN_THRESHOLD = 0.01
-PLANT_CONFIDENCE_THRESHOLD = 0.15  # Minimum confidence to consider image as plant
+THRESHOLD = 0.25
+MARGIN_THRESHOLD = 0.12
+PLANT_CONFIDENCE_THRESHOLD = 0.35  # Minimum class confidence to consider image as a plant disease sample
 
 @st.cache_resource(show_spinner=False)
 def load_model_and_classes():
@@ -130,20 +130,24 @@ def preprocess_image(pil_img: Image.Image) -> np.ndarray:
     return np.expand_dims(arr, axis=0)
 
 def is_plant_image(pil_img: Image.Image) -> bool:
-    """Check if image contains plant-like features (green content)."""
+    """Check if image contains plant-like features using green color and saturation heuristics."""
     img = pil_img.convert('RGB')
-    pixels = list(img.getdata())
-    
-    green_pixels = 0
-    total_pixels = len(pixels)
-    
-    for r, g, b in pixels:
-        # Count pixels that are more green than red/blue
-        if g > r and g > b and g > 50:  # Green channel dominant and reasonably bright
-            green_pixels += 1
-    
-    green_ratio = green_pixels / total_pixels
-    return green_ratio > 0.05  # At least 5% green pixels
+    arr = np.array(img, dtype=np.uint8)
+    if arr.size == 0:
+        return False
+
+    r = arr[..., 0].astype(np.int16)
+    g = arr[..., 1].astype(np.int16)
+    b = arr[..., 2].astype(np.int16)
+
+    green_mask = (g > r + 15) & (g > b + 15) & (g > 60)
+    green_ratio = green_mask.mean()
+
+    sat = (np.maximum.reduce([r, g, b]) - np.minimum.reduce([r, g, b])).astype(np.float32) / 255.0
+    green_saturation = sat[green_mask].mean() if green_mask.any() else 0.0
+
+    return green_ratio > 0.06 and green_saturation > 0.15
+
 
 def parse_class_label(raw: str) -> tuple[str, str]:
     """
@@ -172,7 +176,7 @@ def infer(pil_img: Image.Image) -> dict:
             }
         
         arr = preprocess_image(pil_img)
-        preds = model.predict(arr, verbose=0)[0]
+        preds = model.predict(arr, verbose=0)[0]  
         
         top_index = np.argmax(preds)
         confidence = float(preds[top_index])
