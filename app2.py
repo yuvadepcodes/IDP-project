@@ -1,14 +1,3 @@
-"""
-CropSense AI  —  v3.0  (Two-Page Website with Fixed Model)
-==========================================================
-Requires:
-  crop_disease_model.keras   (TF/Keras SavedModel)
-  class_names.txt            (one class per line)
-
-Run:
-  streamlit run app2.py
-"""
-
 import streamlit as st
 import numpy as np
 from PIL import Image
@@ -95,9 +84,10 @@ div.block-container {
 # ─────────────────────────────────────────────────────────────
 #  MODEL + CLASS LOADER  (cached so it only runs once)
 # ─────────────────────────────────────────────────────────────
-MODEL_PATH       = "crop_disease_model.keras"
-CLASS_NAMES_PATH = "class_names.txt"
-IMG_SIZE         = (224, 224)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "crop_disease_model.keras")
+CLASS_NAMES_PATH = os.path.join(BASE_DIR, "class_names.txt")
+IMG_SIZE = (224, 224)
 THRESHOLD = 0.25
 MARGIN_THRESHOLD = 0.12
 PLANT_CONFIDENCE_THRESHOLD = 0.35  # Minimum class confidence to consider image as a plant disease sample
@@ -123,6 +113,7 @@ def load_model_and_classes():
 
 model, CLASS_NAMES = load_model_and_classes()
 DEMO_MODE = (model is None or not CLASS_NAMES)
+MODEL_STATUS = "Loaded" if not DEMO_MODE else "Not loaded"
 
 # ─────────────────────────────────────────────────────────────
 #  INFERENCE HELPERS
@@ -440,7 +431,7 @@ with st.sidebar:
                 unsafe_allow_html=True)
 
     status_color = "#4CAF50" if not DEMO_MODE else "#FFC107"
-    status_text = "Model Loaded ✓" if not DEMO_MODE else "Demo Mode"
+    status_text = "Model Loaded ✓" if not DEMO_MODE else "Demo Mode (model not loaded)"
     n_classes = len(CLASS_NAMES) if CLASS_NAMES else "—"
     st.markdown(f"""
     <div style="padding:0 12px;font-size:.72rem;line-height:2;color:rgba(255,255,255,.35);">
@@ -450,6 +441,7 @@ with st.sidebar:
         <span style="color:rgba(255,255,255,.6);font-weight:600">{status_text}</span>
       </div>
       Classes: {n_classes} &nbsp;·&nbsp; IMG: {IMG_SIZE[0]}px
+      <div style="margin-top:4px;color:rgba(255,255,255,.45);font-size:.68rem;">Model file: {os.path.basename(MODEL_PATH)}</div>
     </div>
     """, unsafe_allow_html=True)
 
